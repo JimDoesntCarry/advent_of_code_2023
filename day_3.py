@@ -6,7 +6,10 @@ data_map.pop()
 checker = 0
 part_holder = []
 valid_part_number = []
+gear_dict = {}
+check_coords = []
 invalid_part_number = []
+gear_values = []
 
 yrange = range(-1,2)
 xrange = range(-1,2)
@@ -29,28 +32,24 @@ for y in range(0,len(data_map)):
                 xrange = range(-1,2)
             for i in yrange:
                 for j in xrange:
-                    try:
-                        if data_map[y+i][x+j].isdigit() == False and data_map[y+i][x+j] != ".":
-                            checker = 1
-                    except Exception as e:
-                        print(e)
-                        print("x = ",x)
-                        print("y = ",y)
-                        print("xrange = ",xrange)
-                        print("yrange = ",yrange)
-                        print("xlen = ",len(data_map[y]))
-                        print("ylen = ",len(data_map))
+                    if data_map[y+i][x+j]=="*":
+                        checker = 1
+                        check_coords = [y+i,x+j]
         if not data_map[y][x].isdigit() and checker == 1:
             checker = 0
-            valid_part_number.append(int(''.join(map(str,part_holder))))
+            if gear_dict.get(str(check_coords)):
+                gear_values.append(int(gear_dict.get(str(check_coords)))*int(''.join(map(str,part_holder))))
+            else:
+                gear_dict.update({str(check_coords):int(''.join(map(str,part_holder)))})
             part_holder = []
+            check_coords = []
         if not data_map[y][x].isdigit() and checker == 0:
             if part_holder != []:
                 invalid_part_number.append(int(''.join(map(str,part_holder))))
             part_holder = []
 try:
-    print(sum(valid_part_number))
-    print(valid_part_number)
+    print(sum(gear_values))
+    print(gear_values)
 except Exception as e:
     print(e)
 #stars = []
